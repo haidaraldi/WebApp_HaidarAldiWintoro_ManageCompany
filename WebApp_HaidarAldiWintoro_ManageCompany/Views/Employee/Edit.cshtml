@@ -1,0 +1,82 @@
+﻿@model WebApp_HaidarAldiWintoro_ManageCompany.ViewModels.Master.MasterEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-uppercase">Edit Employee</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="EmployeesVM.Index" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EmployeesVM.FirstName" class="control-label">First Name</label>
+                        <input asp-for="EmployeesVM.FirstName" class="form-control" />
+                        <span asp-validation-for="EmployeesVM.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EmployeesVM.LastName" class="control-label">Last Name</label>
+                        <input asp-for="EmployeesVM.LastName" class="form-control" />
+                        <span asp-validation-for="EmployeesVM.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EmployeesVM.Phone" class="control-label">Phone</label>
+                        <input asp-for="EmployeesVM.Phone" onkeypress="return isNumber(event)" class="form-control" />
+                        <span asp-validation-for="EmployeesVM.Phone" class="text-danger"></span>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Company</label>
+                        <select asp-for="EmployeesVM.IndexCompany" class="form-control">
+                            <option hidden selected value="@Model.EmployeesVM.IndexCompany">@Model.EmployeesVM.CompanyName</option>
+                            @foreach (var item in Model.CompanyNames)
+                            {
+                                <option value="@item.IndexCompany">@item.CompanyName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="EmployeesVM.IndexCompany" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i> Update</button>
+                <a asp-action="Index" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-fast-backward"></i> Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        function isNumber(evt) {
+            var theEvent = evt || window.event;
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+            if (key.length == 0) return;
+            var regex = /^[0-9.\b]+$/;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
