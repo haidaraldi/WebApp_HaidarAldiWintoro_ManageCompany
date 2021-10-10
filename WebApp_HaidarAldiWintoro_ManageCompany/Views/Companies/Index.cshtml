@@ -13,7 +13,6 @@
                     <li class="breadcrumb-item active">Companies</li>
                 </ol>
             </div>
-            <h4 class="page-title">Companies</h4>
         </div>
     </div>
 </div>
@@ -29,100 +28,94 @@
                 </button>
             </div>
         }
+        <p>
+            <!-- Small modal -->
+            <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus-circle"></i> Add Company</button>
+        </p>
+        <div class="col-md-1 m-t-30">
 
-        <div class="card m-b-20">
-            <p>
-                <!-- Small modal -->
-                <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus-circle"></i> Add Company</button>
-            </p>
-            <div class="col-md-4 m-t-30">
-
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title mt-0" id="myLargeModalLabel">Add Company</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <form asp-action="Create" enctype="multipart/form-data">
-                                    <div class="form-group row">
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Logo</label>
-                                            <div class="custom-file">
-                                                <input asp-for="CompaniesVM.CompanyLogo" class="custom-file-input" />
-                                                <label class="custom-file-label" for="customFile">Choose file</label>
-                                            </div>
-                                            <span asp-validation-for="CompaniesVM.CompanyLogo" class="text-danger"></span>
+            <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mt-0" id="myLargeModalLabel">Add Company</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Create" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Logo</label>
+                                        <div class="custom-file">
+                                            <input asp-for="CompaniesVM.CompanyLogo" class="custom-file-input" />
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
                                         </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Company Name</label>
-                                            <input asp-for="CompaniesVM.Name" class="form-control">
-                                            <span asp-validation-for="CompaniesVM.Name" class="text-danger"></span>
-                                        </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Email</label>
-                                            <input asp-for="CompaniesVM.Email" class="form-control" type="email">
-                                            <span asp-validation-for="CompaniesVM.Email" class="text-danger"></span>
-                                        </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Website</label>
-                                            <input asp-for="CompaniesVM.Website" class="form-control" type="url">
-                                            <span asp-validation-for="CompaniesVM.Website" class="text-danger"></span>
-                                        </div>
+                                        <span asp-validation-for="CompaniesVM.CompanyLogo" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <div>
-                                            <button type="submit" class="btn btn-success waves-effect waves-light">
-                                                Save
-                                            </button>
-                                            <button type="reset" class="btn btn-secondary waves-effect m-l-5" data-dismiss="modal">
-                                                Back to List
-                                            </button>
-                                        </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Company Name</label>
+                                        <input asp-for="CompaniesVM.Name" class="form-control">
+                                        <span asp-validation-for="CompaniesVM.Name" class="text-danger"></span>
                                     </div>
-                                </form>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-            </div>
-
-            <div class="card-body">
-                <h4 class="mt-0 header-title">List Of Companies</h4>
-                <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Logo</th>
-                            <th>Company Name</th>
-                            <th>Email</th>
-                            <th>Website</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.ListCompanies.Count(); i++)
-                        {
-                            <tr>
-                                <td>@(i + 1).</td>
-                                <td>
-                                    <img src="@FileLocation.RetriveFileFromFolder@Model.ListCompanies[i].Logo" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
-                                </td>
-                                <td>@Model.ListCompanies[i].Name</td>
-                                <td><a href="mailto:@Model.ListCompanies[i].Email">@Model.ListCompanies[i].Email</a></td>
-                                <td><a href="@Model.ListCompanies[i].Website">@Model.ListCompanies[i].Website</a></td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-danger rounded-0"><i class="fa fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-            </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Email</label>
+                                        <input asp-for="CompaniesVM.Email" class="form-control" type="email">
+                                        <span asp-validation-for="CompaniesVM.Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Website</label>
+                                        <input asp-for="CompaniesVM.Website" class="form-control" type="url">
+                                        <span asp-validation-for="CompaniesVM.Website" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <button type="submit" class="btn btn-success waves-effect waves-light">
+                                            Save
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary waves-effect m-l-5" data-dismiss="modal">
+                                            Back to List
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
+
+        <center><h4>List Of Companies</h4></center>
+        <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Logo</th>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Website</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.ListCompanies.Count(); i++)
+                {
+                    <tr>
+                        <td>@(i + 1).</td>
+                        <td>
+                            <img src="@FileLocation.RetriveFileFromFolder@Model.ListCompanies[i].Logo" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                        </td>
+                        <td>@Model.ListCompanies[i].Name</td>
+                        <td><a href="mailto:@Model.ListCompanies[i].Email">@Model.ListCompanies[i].Email</a></td>
+                        <td><a href="@Model.ListCompanies[i].Website">@Model.ListCompanies[i].Website</a></td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
+                            <a asp-action="Delete" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-danger rounded-0"><i class="fa fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div> <!-- end col -->
 </div> <!-- end row -->
 @section Scripts{
@@ -134,7 +127,6 @@
                 ordering: true,
                 paging: true,
                 searching: true,
-                deferRender: true,
                 "ordering": true,
                 "lengthChange": true,
                 "pageLength": 10,

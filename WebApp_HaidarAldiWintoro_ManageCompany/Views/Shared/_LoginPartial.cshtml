@@ -2,7 +2,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="nav navbar-nav navbar-right">
+<ul class="nav navbar-expand-md navbar-nav navbar-right">
 @if (SignInManager.IsSignedIn(User))
 {
     <li>
@@ -10,7 +10,7 @@
     </li>
     <li>
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button style="margin-top:8px"  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
         </form>
     </li>
 }

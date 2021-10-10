@@ -12,7 +12,6 @@
                     <li class="breadcrumb-item active">Employees</li>
                 </ol>
             </div>
-            <h4 class="page-title">Employees</h4>
         </div>
     </div>
 </div>
@@ -28,121 +27,117 @@
             </div>
         }
 
-        <div class="card m-b-20">
-            <p>
-                <!-- Small modal -->
-                <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus-circle"></i> Add Employee</button>
-            </p>
-            <div class="col-md-4 m-t-30">
+        <p>
+            <!-- Small modal -->
+            <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus-circle"></i> Add Employee</button>
+        </p>
+        <div class="col-md-1 m-t-30">
 
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title mt-0" id="myLargeModalLabel">Add Employee</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <form asp-action="Index" enctype="multipart/form-data">
-                                    <div class="form-group row">
-                                        <div class="col-sm-7">
-                                            <label class="control-label">First Name</label>
-                                            <input asp-for="EmployeesVM.FirstName" class="form-control">
-                                            <span asp-validation-for="EmployeesVM.FirstName" class="text-danger"></span>
-                                        </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Last Name</label>
-                                            <input asp-for="EmployeesVM.LastName" class="form-control">
-                                            <span asp-validation-for="EmployeesVM.LastName" class="text-danger"></span>
-                                        </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Phone</label>
-                                            <input asp-for="EmployeesVM.Phone" class="form-control" onkeypress="return isNumber(event)">
-                                            <span asp-validation-for="EmployeesVM.Phone" class="text-danger"></span>
-                                        </div>
-                                        <div class="col-sm-7">
-                                            <label class="control-label">Company</label>
-                                            <select asp-for="EmployeesVM.IndexCompany" class="form-control">
-                                                <option disabled selected value="">Choose Company</option>
-                                                @foreach (var item in Model.CompanyNames)
-                                                {
-                                                    <option value="@item.IndexCompany">@item.CompanyName</option>
-                                                }
-                                            </select>
-                                            <span asp-validation-for="EmployeesVM.IndexCompany" class="text-danger"></span>
-                                        </div>
+            <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title mt-0" id="myLargeModalLabel">Add Employee</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Index" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <label class="control-label">First Name</label>
+                                        <input asp-for="EmployeesVM.FirstName" class="form-control">
+                                        <span asp-validation-for="EmployeesVM.FirstName" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group">
-                                        <div>
-                                            <button type="submit" class="btn btn-success waves-effect waves-light">
-                                                Save
-                                            </button>
-                                            <button type="reset" class="btn btn-secondary waves-effect m-l-5" data-dismiss="modal">
-                                                Back to List
-                                            </button>
-                                        </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Last Name</label>
+                                        <input asp-for="EmployeesVM.LastName" class="form-control">
+                                        <span asp-validation-for="EmployeesVM.LastName" class="text-danger"></span>
                                     </div>
-                                </form>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-            </div>
-
-            <div class="card-body">
-                <h4 class="mt-0 header-title">List Of Employees</h4>
-                <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Phone</th>
-                            <th>Company</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.EmployeesVMs.Count(); i++)
-                        {
-                            <tr>
-                                <td>@(i + 1).</td>
-                                <td>@Model.EmployeesVMs[i].FirstName</td>
-                                <td>@Model.EmployeesVMs[i].LastName</td>
-                                <td>@Model.EmployeesVMs[i].Phone</td>
-                                <td>
-                                    <a href="#" name="companyName" data-toggle="modal" data-target="#modalRole-@i">@Model.EmployeesVMs[i].CompanyName</a>
-                                    <div id="modalRole-@i" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title mt-0" id="myModalLabel">Company Detail</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h5>Company: @Model.EmployeesVMs[i].CompanyName</h5>
-                                                    <h5>Email: <a href="mailto:@Model.EmployeesVMs[i].CompanyEmail">@Model.EmployeesVMs[i].CompanyEmail</a></h5>
-                                                    <h5>Website: <a href="@Model.EmployeesVMs[i].CompanyWeb">@Model.EmployeesVMs[i].CompanyWeb</a></h5>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Kembali</button>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-index="@Model.EmployeesVMs[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
-                                    <a class="btn btn-sm btn-danger rounded-0" onclick="Delete(@Model.EmployeesVMs[i].Index)"><i class="fa fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-            </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Phone</label>
+                                        <input asp-for="EmployeesVM.Phone" class="form-control" onkeypress="return isNumber(event)">
+                                        <span asp-validation-for="EmployeesVM.Phone" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label">Company</label>
+                                        <select asp-for="EmployeesVM.IndexCompany" class="form-control">
+                                            <option disabled selected value="">Choose Company</option>
+                                            @foreach (var item in Model.CompanyNames)
+                                            {
+                                                <option value="@item.IndexCompany">@item.CompanyName</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="EmployeesVM.IndexCompany" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <button type="submit" class="btn btn-success waves-effect waves-light">
+                                            Save
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary waves-effect m-l-5" data-dismiss="modal">
+                                            Back to List
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
+
+        <center><h4>List Of Employees</h4></center>
+        <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.EmployeesVMs.Count(); i++)
+                {
+                    <tr>
+                        <td>@(i + 1).</td>
+                        <td>@Model.EmployeesVMs[i].FirstName</td>
+                        <td>@Model.EmployeesVMs[i].LastName</td>
+                        <td>@Model.EmployeesVMs[i].Phone</td>
+                        <td>
+                            <a href="#" name="companyName" data-toggle="modal" data-target="#modalRole-@i">@Model.EmployeesVMs[i].CompanyName</a>
+                            <div id="modalRole-@i" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title mt-0" id="myModalLabel">Company Detail</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>Company: @Model.EmployeesVMs[i].CompanyName</h5>
+                                            <h5>Email: <a href="mailto:@Model.EmployeesVMs[i].CompanyEmail">@Model.EmployeesVMs[i].CompanyEmail</a></h5>
+                                            <h5>Website: <a href="@Model.EmployeesVMs[i].CompanyWeb">@Model.EmployeesVMs[i].CompanyWeb</a></h5>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Kembali</button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-index="@Model.EmployeesVMs[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
+                            <a class="btn btn-sm btn-danger rounded-0" onclick="Delete(@Model.EmployeesVMs[i].Index)"><i class="fa fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
     </div> <!-- end col -->
 </div> <!-- end row -->
 
@@ -155,7 +150,6 @@
                 ordering: true,
                 paging: true,
                 searching: true,
-                deferRender: true,
                 "ordering": true,
                 "lengthChange": true,
                 "pageLength": 10,
