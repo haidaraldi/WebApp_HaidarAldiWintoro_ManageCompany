@@ -70,12 +70,23 @@
                 <!-- sidebar menu start-->
                 <ul class="sidebar-menu" id="nav-accordion">
                     <p class="centered"><img src="~/lib/Content/img/resep.jpg" class="img-circle" width="80"></p>
-                    <li class="sub-menu">            
+                    <li class="sub-menu">
                         <ul class="sub-menu-content">
                             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li><a asp-controller="Companies" asp-action="Index">Companies</a></li>
-                            <li><a asp-controller="Employee" asp-action="Index">Employees</a></li>
                         </ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <ul class="sub-menu-content">
+                                <li><a asp-controller="Companies" asp-action="Index">Companies</a></li>
+                                <li><a asp-controller="Employee" asp-action="Index">Employees</a></li>
+                            </ul>
+                        }
+                        else if (User.IsInRole("User"))
+                        {
+                            <ul class="sub-menu-content">
+                                <li><a asp-controller="Employee" asp-action="Index">Employees</a></li>
+                            </ul>
+                        }
                     </li>
                 </ul>
                 <!-- sidebar menu end-->

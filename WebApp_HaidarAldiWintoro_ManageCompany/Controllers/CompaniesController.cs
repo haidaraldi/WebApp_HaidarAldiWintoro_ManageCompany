@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +12,7 @@ using WebApp_HaidarAldiWintoro_ManageCompany.ViewModels.Master;
 
 namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CompaniesController : Controller
     {
         private readonly ApplicationDbContext _context;

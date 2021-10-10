@@ -1,4 +1,7 @@
 ﻿@model WebApp_HaidarAldiWintoro_ManageCompany.ViewModels.Master.MasterCompanyViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@using WebApp_HaidarAldiWintoro_ManageCompany.Contants
 
 @{
     ViewData["Title"] = "Companies";
@@ -28,10 +31,13 @@
                 </button>
             </div>
         }
-        <p>
-            <!-- Small modal -->
-            <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus-circle"></i> Add Company</button>
-        </p>
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Companies.Create)).Result.Succeeded)
+        {
+            <p>
+                <!-- Small modal -->
+                <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus-circle"></i> Add Company</button>
+            </p>
+        }
         <div class="col-md-1 m-t-30">
 
             <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -85,37 +91,46 @@
             </div><!-- /.modal -->
         </div>
 
-        <center><h4>List Of Companies</h4></center>
-        <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Logo</th>
-                    <th>Company Name</th>
-                    <th>Email</th>
-                    <th>Website</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.ListCompanies.Count(); i++)
-                {
+        @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Companies.View)).Result.Succeeded)
+        {
+            <center><h4>List Of Companies</h4></center>
+            <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                <thead>
                     <tr>
-                        <td>@(i + 1).</td>
-                        <td>
-                            <img src="@FileLocation.RetriveFileFromFolder@Model.ListCompanies[i].Logo" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
-                        </td>
-                        <td>@Model.ListCompanies[i].Name</td>
-                        <td><a href="mailto:@Model.ListCompanies[i].Email">@Model.ListCompanies[i].Email</a></td>
-                        <td><a href="@Model.ListCompanies[i].Website">@Model.ListCompanies[i].Website</a></td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
-                            <a asp-action="Delete" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-danger rounded-0"><i class="fa fa-trash-alt"></i></a>
-                        </td>
+                        <th>No</th>
+                        <th>Logo</th>
+                        <th>Company Name</th>
+                        <th>Email</th>
+                        <th>Website</th>
+                        <th>Action</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.ListCompanies.Count(); i++)
+                    {
+                        <tr>
+                            <td>@(i + 1).</td>
+                            <td>
+                                <img src="@FileLocation.RetriveFileFromFolder@Model.ListCompanies[i].Logo" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                            </td>
+                            <td>@Model.ListCompanies[i].Name</td>
+                            <td><a href="mailto:@Model.ListCompanies[i].Email">@Model.ListCompanies[i].Email</a></td>
+                            <td><a href="@Model.ListCompanies[i].Website">@Model.ListCompanies[i].Website</a></td>
+                            <td>
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Companies.Edit)).Result.Succeeded)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-info rounded-0"><i class="fa fa-pencil-alt"></i></a>
+                                }
+                                @if ((AuthorizationService.AuthorizeAsync(User, Permissions.Companies.Delete)).Result.Succeeded)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@Model.ListCompanies[i].Index" class="btn btn-sm btn-danger rounded-0"><i class="fa fa-trash-alt"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div> <!-- end col -->
 </div> <!-- end row -->
 @section Scripts{

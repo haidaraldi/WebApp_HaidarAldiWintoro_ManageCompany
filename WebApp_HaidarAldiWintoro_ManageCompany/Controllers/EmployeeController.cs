@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using WebApp_HaidarAldiWintoro_ManageCompany.ViewModels.Master;
 
 namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
 {
+    [Authorize(Roles = "User")]
     public class EmployeeController : Controller
     {
         private readonly ApplicationDbContext _context;
