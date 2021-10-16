@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp_HaidarAldiWintoro_ManageCompany.ViewModels
 {
@@ -13,8 +14,12 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.ViewModels
         public string LastName { get; set; }
         [Required(ErrorMessage = "The Phone field is required.")]
         [StringLength(20)]
-        public string Phone { get; set; }
+        public string Phone { get; set; }  
+        [Required(ErrorMessage = "The Email field is required.")]
+        [StringLength(20)]
+        public string Email { get; set; }
         [Required(ErrorMessage = "The Company Name field is required.")]
+        public DateTime JoinDate { get; set; }
         public int IndexCompany { get; set; }
         public string CompanyName { get; set; }
         public string CompanyEmail { get; set; }

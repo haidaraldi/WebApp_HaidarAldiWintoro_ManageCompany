@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Employees";
 }
+<!--bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!--DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css" />
+<!--Daterangepicker -->
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -15,6 +22,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12">
         @if (TempData["MessageSuccess"] != null)
@@ -26,7 +34,6 @@
                 </button>
             </div>
         }
-
         <p>
             <!-- Small modal -->
             <button type="button" class="btn btn-primary rounded-0" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fa fa-plus-circle"></i> Add Employee</button>
@@ -59,6 +66,11 @@
                                         <span asp-validation-for="EmployeesVM.Phone" class="text-danger"></span>
                                     </div>
                                     <div class="col-sm-12">
+                                        <label class="control-label">Email</label>
+                                        <input asp-for="EmployeesVM.Email" class="form-control" type="email">
+                                        <span asp-validation-for="EmployeesVM.Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-12">
                                         <label class="control-label">Company</label>
                                         <select asp-for="EmployeesVM.IndexCompany" class="form-control">
                                             <option disabled selected value="">Choose Company</option>
@@ -86,8 +98,8 @@
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
         </div>
-
         <center><h4>List Of Employees</h4></center>
+        <br />
         <table id="datatable" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -95,6 +107,8 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Phone</th>
+                    <th>Email</th>
+                    <th>Join Date</th>
                     <th>Company</th>
                     <th>Action</th>
                 </tr>
@@ -107,6 +121,8 @@
                         <td>@Model.EmployeesVMs[i].FirstName</td>
                         <td>@Model.EmployeesVMs[i].LastName</td>
                         <td>@Model.EmployeesVMs[i].Phone</td>
+                        <td>@Model.EmployeesVMs[i].Email</td>
+                        <td>@String.Format("{0:dd/MM/yyyy}", @Model.EmployeesVMs[i].JoinDate)</td>
                         <td>
                             <a href="#" name="companyName" data-toggle="modal" data-target="#modalRole-@i">@Model.EmployeesVMs[i].CompanyName</a>
                             <div id="modalRole-@i" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -142,23 +158,93 @@
 </div> <!-- end row -->
 
 @section Scripts{
+    <!--Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--Boostrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!--DataTables -->
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <!--DateRangePicker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#datatable").DataTable({
-                processing: true,
-                ordering: true,
-                paging: true,
-                searching: true,
-                "ordering": true,
-                "lengthChange": true,
-                "pageLength": 10,
-                "bDestroy": true,
-                "pagingType": "full_numbers",
-                "scrollY": true,
-                "scrollX": true
-            });
+
+        var start_date;
+        var end_date;
+        var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+            var dateStart = parseDateValue(start_date);
+            var dateEnd = parseDateValue(end_date);
+            
+            var evalDate = parseDateValue(aData[5]);
+            if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+                (isNaN(dateStart) && evalDate <= dateEnd) ||
+                (dateStart <= evalDate && isNaN(dateEnd)) ||
+                (dateStart <= evalDate && evalDate <= dateEnd)) {
+                return true;
+            }
+            return false;
         });
+
+        $(document).ready(function () {
+
+            $("#datatable tfoot th").each(function (i) {
+                if ($(this).text() !== '') {
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(this).empty())
+                        .on('change', function () {
+                            var val = $(this).val();
+
+                            $dTable.column(i)
+                                .search(val ? '^' + $(this).val() + '$' : val, true, false)
+                                .draw();
+                        });
+
+          
+                        $dTable.column(i).data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                }
+            });
+
+            var $dTable = $('#datatable').DataTable({ 
+                "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+            });
+
+            $("div.datesearchbox").html('<div class="input-group"> <div class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i> </div><input type="text" class="form-control pull-right" id="datesearch" placeholder="Search by date range.."> </div>');
+
+            document.getElementsByClassName("datesearchbox")[0].style.textAlign = "right";
+
+            $('#datesearch').daterangepicker({
+                autoUpdateInput: false
+            });
+
+            $('#datesearch').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+                start_date = picker.startDate.format('DD/MM/YYYY');
+                end_date = picker.endDate.format('DD/MM/YYYY');
+                $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+                $dTable.draw();
+            });
+
+            $('#datesearch').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                start_date = '';
+                end_date = '';
+                $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+                $dTable.draw();
+            });       
+        });
+
+        function parseDateValue(rawDate) {
+            var dateArray = rawDate.split("/");
+            var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11
+            return parsedDate;
+        }
 
         function Delete(index) {
             swal({

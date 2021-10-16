@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp_HaidarAldiWintoro_ManageCompany.Models
 {
@@ -17,6 +18,14 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.Models
         [Required]
         [StringLength(20)]
         public string Phone { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime JoinDate { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Email { get; set; }
+
 
         public int CompaniesIndex { get; set; }
         public Companies Companies { get; set; }

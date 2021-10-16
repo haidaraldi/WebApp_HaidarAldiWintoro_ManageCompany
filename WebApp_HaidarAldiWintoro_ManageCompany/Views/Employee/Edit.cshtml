@@ -30,11 +30,18 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label asp-for="EmployeesVM.Email" class="control-label"></label>
+                        <input asp-for="EmployeesVM.Email" type="email" class="form-control" />
+                        <span asp-validation-for="EmployeesVM.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label asp-for="EmployeesVM.Phone" class="control-label">Phone</label>
                         <input asp-for="EmployeesVM.Phone" onkeypress="return isNumber(event)" class="form-control" />
                         <span asp-validation-for="EmployeesVM.Phone" class="text-danger"></span>
                     </div>
-                </div> 
+                </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">Company</label>

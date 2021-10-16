@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApp_HaidarAldiWintoro_ManageCompany.Data;
@@ -29,6 +30,8 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
                FirstName = t.FirstName,
                LastName = t.LastName,
                Phone = t.Phone,
+               Email = t.Email,
+               JoinDate = t.JoinDate,
                CompanyName = t.Companies.Name,
                CompanyEmail = t.Companies.Email,
                CompanyWeb  = t.Companies.Website
@@ -57,6 +60,7 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
                     FirstName = model.EmployeesVM.FirstName,
                     LastName = model.EmployeesVM.LastName,
                     Phone = model.EmployeesVM.Phone,
+                    Email = model.EmployeesVM.Email,
                     CompaniesIndex = model.EmployeesVM.IndexCompany
                 };
 
@@ -92,6 +96,7 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
                 FirstName = employees.FirstName,
                 LastName = employees.LastName,
                 Phone = employees.Phone,
+                Email = employees.Email,
                 IndexCompany = employees.CompaniesIndex,
                 CompanyName = companyName.Name
             };
@@ -114,6 +119,7 @@ namespace WebApp_HaidarAldiWintoro_ManageCompany.Controllers
                 employees.FirstName = model.EmployeesVM.FirstName;
                 employees.LastName = model.EmployeesVM.LastName;
                 employees.Phone = model.EmployeesVM.Phone;
+                employees.Email = model.EmployeesVM.Email;
                 employees.CompaniesIndex = model.EmployeesVM.IndexCompany;
           
                 _context.Update(employees);
