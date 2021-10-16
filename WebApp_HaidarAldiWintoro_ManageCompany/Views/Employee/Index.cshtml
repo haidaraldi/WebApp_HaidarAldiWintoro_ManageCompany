@@ -160,8 +160,14 @@
                     <td style="border:none"></td>
                 </tr>
             </tfoot>
+            <tfoot style="border:none">
+                <tr style="border:none">
+                    <td style="border:none">
+                        <button type="button" class="btn btn btn-primary waves-effect waves-light" id="refresher3">Reset</button>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
-
     </div> <!-- end col -->
 </div> <!-- end row -->
 
@@ -197,10 +203,10 @@
         });
 
         $(document).ready(function () {
-            //$("#datatable").append(
-            //    $('<tfoot/>').append($("#datatable thead tr").clone())
-            //);
 
+            $('#refresher3').click(function () {
+                location.reload(true);
+            });
             var $dTable = $('#datatable').DataTable({
                 processing: true,
                 ordering: true,
