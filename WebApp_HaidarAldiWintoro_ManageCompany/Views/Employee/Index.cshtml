@@ -3,12 +3,9 @@
 @{
     ViewData["Title"] = "Employees";
 }
-<!--bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<!--DataTables -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css" />
+
 <!--Daterangepicker -->
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <div class="row">
     <div class="col-sm-12">
@@ -157,14 +154,10 @@
     </div> <!-- end col -->
 </div> <!-- end row -->
 
+
+
 @section Scripts{
-    <!--Jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!--Boostrap -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!--DataTables -->
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
     <!--DateRangePicker -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -172,12 +165,16 @@
     <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
 
+        function ShowModal(item) {
+            console.log(item);
+        }
+
         var start_date;
         var end_date;
         var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
             var dateStart = parseDateValue(start_date);
             var dateEnd = parseDateValue(end_date);
-            
+
             var evalDate = parseDateValue(aData[5]);
             if ((isNaN(dateStart) && isNaN(dateEnd)) ||
                 (isNaN(dateStart) && evalDate <= dateEnd) ||
@@ -190,29 +187,44 @@
 
         $(document).ready(function () {
 
+            var $dTable = $('#datatable').DataTable({
+                "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+            });
+            // clone tfoot like thead
+            $("#datatable").append(
+                $('<tfoot/>').append($("#datatable thead tr").clone())
+            );
+
+            // append tfoot after thead
+            $('#datatable tfoot').insertAfter($('#datatable thead'))
             $("#datatable tfoot th").each(function (i) {
-                if ($(this).text() !== '') {
+                if (i != 7) {
                     var select = $('<select><option value=""></option></select>')
                         .appendTo($(this).empty())
                         .on('change', function () {
                             var val = $(this).val();
-
+                            debugger;
                             $dTable.column(i)
                                 .search(val ? '^' + $(this).val() + '$' : val, true, false)
                                 .draw();
                         });
 
-          
-                        $dTable.column(i).data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                }
-            });
+                    $dTable.column(i).data().unique().sort().each(function (d, j) {
 
-            var $dTable = $('#datatable').DataTable({ 
-                "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+                        var tempdata = d.toString();
+                        var a = tempdata.indexOf("-0")
+                        var b = tempdata.indexOf("\n")
+                        var c = tempdata.substring(78, b - 4)
+
+                        select.append('<option value="' + c + '">' + c + '</option>');
+
+                    });
+                }
+                else {
+                    var select = ''.appendTo($(this).empty())
+                }
             });
 
             $("div.datesearchbox").html('<div class="input-group"> <div class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i> </div><input type="text" class="form-control pull-right" id="datesearch" placeholder="Search by date range.."> </div>');
@@ -237,7 +249,7 @@
                 end_date = '';
                 $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
                 $dTable.draw();
-            });       
+            });
         });
 
         function parseDateValue(rawDate) {
