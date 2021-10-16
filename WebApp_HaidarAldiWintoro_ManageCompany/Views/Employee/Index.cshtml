@@ -149,6 +149,17 @@
                     </tr>
                 }
             </tbody>
+            <tfoot style="border:none">
+                <tr style="border:none">
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                    <td style="border:none"></td>
+                </tr>
+            </tfoot>
         </table>
 
     </div> <!-- end col -->
@@ -186,20 +197,28 @@
         });
 
         $(document).ready(function () {
+            //$("#datatable").append(
+            //    $('<tfoot/>').append($("#datatable thead tr").clone())
+            //);
 
             var $dTable = $('#datatable').DataTable({
+                processing: true,
+                ordering: true,
+                paging: true,
+                searching: true,
+                "ordering": true,
+                "lengthChange": true,
+                "pageLength": 10,
+                "bDestroy": true,
+                "pagingType": "full_numbers",
+                "scrollY": true,
+                "scrollX": true,
                 "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>"
             });
-            // clone tfoot like thead
-            $("#datatable").append(
-                $('<tfoot/>').append($("#datatable thead tr").clone())
-            );
 
-            // append tfoot after thead
-            $('#datatable tfoot').insertAfter($('#datatable thead'))
-            $("#datatable tfoot th").each(function (i) {
+            $("#datatable tfoot tr td").each(function (i) {
                 if (i != 7) {
                     var select = $('<select><option value=""></option></select>')
                         .appendTo($(this).empty())
@@ -248,7 +267,7 @@
                 start_date = '';
                 end_date = '';
                 $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-                $dTable.draw();
+                location.reload(true)
             });
         });
 
